@@ -31,7 +31,7 @@
                                 <th>ID</th>
                                 <th>Nombre</th>
                                 <th>Email</th>
-                                <th>Teléfono</th>
+                                <th>Telefono</th>
                             </tr>
                             <c:forEach var="employee" items="${sessionScope.employeeList}">
                                 <tr>
