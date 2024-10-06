@@ -97,27 +97,45 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
         List<Employee> list = new ArrayList<Employee>();
         Employee employee = null;
         ResultSet rs = null;
+    
         try {
+            // Asegúrate de cargar el driver de la base de datos
             Class.forName(DRIVER);
+            
+            // Crear una conexión
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            
+            // Inicializar el Statement
+            stmt = connection.createStatement(); 
+            
+            // Ejecutar la consulta
             rs = stmt.executeQuery(query);
+            
             while (rs.next()) {
                 employee = new Employee();
-                
                 employee.setId(rs.getString("id"));
                 employee.setName(rs.getString("name"));
-                employee.setEmail((rs.getString("email")));
-                employee.setPhone((rs.getString("phone")));
-                // add each employee to the list
+                employee.setEmail(rs.getString("email"));
+                employee.setPhone(rs.getString("phone"));
                 list.add(employee);
             }
-            connection.close();
         } catch (SQLException sqlex) {
-            System.out.println(sqlex);
+            System.out.println("Error de SQL: " + sqlex);
         } catch (ClassNotFoundException ex) {
-            System.out.println(ex);
+            System.out.println("Error cargando el driver JDBC: " + ex);
+        } finally {
+            // Liberar recursos en el bloque finally
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                System.out.println("Error cerrando recursos: " + e);
+            }
         }
+        
         return list;
     }
+     
 
 }
