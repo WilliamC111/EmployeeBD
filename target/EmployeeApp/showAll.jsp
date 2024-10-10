@@ -18,7 +18,7 @@
             </div>
 
             <div class="content">
-                <h1>Lista de Empleados V3</h1>
+                <h1>Lista de Empleados</h1>
 
                 <form action="ShowAllEmployee" method="get">
                     <input type="submit" value="Actualizar Lista">
@@ -31,7 +31,7 @@
                                 <th>ID</th>
                                 <th>Nombre</th>
                                 <th>Email</th>
-                                <th>Teléfono</th>
+                                <th>Telefono</th>
                             </tr>
                             <c:forEach var="employee" items="${sessionScope.employeeList}">
                                 <tr>
@@ -53,7 +53,7 @@
             <div class="footer">
                 <h3>INTEGRANTES:</h3>
                 <p>Andres Maldonado</p>
-                <p>Esteban Peña</p>
+                <p>Esteban Penia</p>
                 <p>William Cely</p>
             </div>
         </body>

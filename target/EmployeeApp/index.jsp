@@ -16,7 +16,7 @@
     </div>
     
     <div class="content">
-        <h1>EMPLOYEE APP-2</h1>
+        <h1>EMPLOYEE BD</h1>
         <h2>Por favor ingrese los datos del empleado</h2>
         <div class="formulario" style="text-align: center;">
             <form action="AddEmployee" method="post">
@@ -50,9 +50,9 @@
 
     <div class="footer">
         <h3>INTEGRANTES:</h3>
-        <p>Andres Maldonado</p>
-        <p>Esteban Peña</p>
-        <p>William Cely</p>
+            <p>Andres Maldonado</p>
+            <p>Esteban Penia</p>
+            <p>William Cely</p>
     </div>
 </body>
 </html>

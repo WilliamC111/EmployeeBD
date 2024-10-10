@@ -5,7 +5,7 @@
 
         <head>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-            <title>Eliminar Empleado v2</title>
+            <title>Eliminar Empleado</title>
             <link href="css/empStyle.css" rel="stylesheet" type="text/css">
         </head>
 
@@ -19,7 +19,7 @@
 
             <div class="content">
                 <h1>EMPLOYEE APP</h1>
-                <h2>Ingrese el ID del empleado a eliminar (Con MySQL) V2</h2>
+                <h2>Ingrese el ID del empleado a eliminar de la BD</h2>
                 <div class="formulario" style="text-align: center;">
                     <form action="DeleteEmployee" method="get">
                         <table cellspacing="3" cellpadding="3" border="1">
@@ -65,7 +65,7 @@
             <div class="footer">
                 <h3>INTEGRANTES:</h3>
                 <p>Andres Maldonado</p>
-                <p>Esteban Peña</p>
+                <p>Esteban Penia</p>
                 <p>William Cely</p>
             </div>
         </body>
