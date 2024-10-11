@@ -1,23 +1,58 @@
 package edu.uptc.swi.service;
 
+import java.io.InputStream;
+
+import java.io.IOException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import edu.uptc.swi.model.Employee;
 
 public class EmployeeDAOImpl implements IEmployeeDAO {
 
-    private static final String USER = "root";
-    private static final String PASSWORD = "A1234";
-    private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://localhost:3306/employee?useSSL=false&allowPublicKeyRetrieval=true";
     private static Connection connection = null;
     private Statement stmt = null;
+
+    private Properties loadProperties() {
+        Properties props = new Properties();
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
+            if (input == null) {
+                System.out.println("Lo siento, no pude encontrar el archivo application.properties");
+                return null;
+            }
+            props.load(input);
+        } catch (IOException ex) {
+            System.out.println("Error cargando el archivo de propiedades: " + ex.getMessage());
+        }
+        return props;
+    }
+
+    private Connection getConnection() {
+        Properties props = loadProperties();
+        String url = props.getProperty("url");
+        String user = props.getProperty("user");
+        String password = props.getProperty("password");
+        String driver = props.getProperty("driver");
+
+        Connection conn = null;
+        try {
+            Class.forName(driver);
+            conn = DriverManager.getConnection(url, user, password);
+        } catch (SQLException sqlex) {
+            System.out.println("Error SQL: " + sqlex.getMessage());
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Error cargando el driver JDBC: " + ex.getMessage());
+        }
+        return conn;
+    }
 
     @Override
     public List<Employee> findAll() {
@@ -54,16 +89,13 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
     private boolean executeQuery(String query) {
         boolean res = false;
         try {
-            Class.forName(DRIVER);
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            connection = getConnection();
             stmt = connection.createStatement();
             stmt.executeUpdate(query);
             connection.close();
             res = true;
         } catch (SQLException sqlex) {
             System.out.println(sqlex);
-        } catch (ClassNotFoundException ex) {
-            System.out.println(ex);
         }
         return res;
     }
@@ -72,8 +104,7 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
         String query = "select * from employee where id=" + id + ";";
         Employee emp = new Employee();
         try {
-            Class.forName(DRIVER);
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            connection = getConnection();
             stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
@@ -85,11 +116,8 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
             connection.close();
         } catch (SQLException sqlex) {
             System.out.println(sqlex);
-        } catch (ClassNotFoundException ex) {
-            System.out.println(ex);
         }
         return emp;
-
     }
 
     private List<Employee> getEmployees() {
@@ -97,20 +125,12 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
         List<Employee> list = new ArrayList<Employee>();
         Employee employee = null;
         ResultSet rs = null;
-    
+
         try {
-            // Asegúrate de cargar el driver de la base de datos
-            Class.forName(DRIVER);
-            
-            // Crear una conexión
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            
-            // Inicializar el Statement
-            stmt = connection.createStatement(); 
-            
-            // Ejecutar la consulta
+            connection = getConnection();
+            stmt = connection.createStatement();
             rs = stmt.executeQuery(query);
-            
+
             while (rs.next()) {
                 employee = new Employee();
                 employee.setId(rs.getString("id"));
@@ -121,10 +141,7 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
             }
         } catch (SQLException sqlex) {
             System.out.println("Error de SQL: " + sqlex);
-        } catch (ClassNotFoundException ex) {
-            System.out.println("Error cargando el driver JDBC: " + ex);
         } finally {
-            // Liberar recursos en el bloque finally
             try {
                 if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
@@ -133,9 +150,6 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
                 System.out.println("Error cerrando recursos: " + e);
             }
         }
-        
         return list;
     }
-     
-
 }
